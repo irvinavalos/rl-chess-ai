@@ -4,6 +4,20 @@
 
 #include <stdio.h>
 
+typedef unsigned long long U64;
+
+/* Appends ULL suffix, ensuring input is compiled as an
+ * unsigned 64 bit literal. Read more at:
+ * https://www.chessprogramming.org/Bitboards#DefininingBitboards */
+#define C64(constantU64) constantU64##ULL
+
+// Macros
+
+#define get_bit(board, square) (board & (1ULL << square))
+#define set_bit(board, square) (board |= (1ULL << square))
+#define pop_bit(board, square) (get_bit(board, square) ? board ^= (1ULL << square) : 0)
+#define get_square(rank_idx, file_idx) (8 * rank_idx + file_idx)
+
 enum {
   a8, b8, c8, d8, e8, f8, g8, h8,
   a7, b7, c7, d7, e7, f7, g7, h7,
@@ -15,12 +29,85 @@ enum {
   a1, b1, c1, d1, e1, f1, g1, h1,
 };
 
-#define U64 unsigned long long
+enum {
+  white,
+  black
+};
 
-#define get_bit(board, square) (board & (1ULL << square))
-#define set_bit(board, square) (board |= (1ULL << square))
-#define pop_bit(board, square) (get_bit(board, square) ? board ^= (1ULL << square) : 0)
+/*
+      Not A file 
 
-void print_chessboard(U64 board);
+  8  0 1 1 1 1 1 1 1
+  7  0 1 1 1 1 1 1 1
+  6  0 1 1 1 1 1 1 1
+  5  0 1 1 1 1 1 1 1
+  4  0 1 1 1 1 1 1 1
+  3  0 1 1 1 1 1 1 1
+  2  0 1 1 1 1 1 1 1
+  1  0 1 1 1 1 1 1 1
+
+     a b c d e f g h
+ */
+
+const U64 not_a_file = 18374403900871474942ULL;
+
+/*
+      Not H file
+
+ 8  1 1 1 1 1 1 1 0
+ 7  1 1 1 1 1 1 1 0
+ 6  1 1 1 1 1 1 1 0
+ 5  1 1 1 1 1 1 1 0
+ 4  1 1 1 1 1 1 1 0
+ 3  1 1 1 1 1 1 1 0
+ 2  1 1 1 1 1 1 1 0
+ 1  1 1 1 1 1 1 1 0
+
+    a b c d e f g h
+ */
+
+const U64 not_ab_file = 18229723555195321596ULL;
+
+/*
+      Not H file
+
+ 8  1 1 1 1 1 1 1 0
+ 7  1 1 1 1 1 1 1 0
+ 6  1 1 1 1 1 1 1 0
+ 5  1 1 1 1 1 1 1 0
+ 4  1 1 1 1 1 1 1 0
+ 3  1 1 1 1 1 1 1 0
+ 2  1 1 1 1 1 1 1 0
+ 1  1 1 1 1 1 1 1 0
+
+    a b c d e f g h
+ */
+
+const U64 not_h_file = 9187201950435737471ULL;
+
+/*
+      Not HG file
+
+ 8  1 1 1 1 1 1 0 0
+ 7  1 1 1 1 1 1 0 0
+ 6  1 1 1 1 1 1 0 0
+ 5  1 1 1 1 1 1 0 0
+ 4  1 1 1 1 1 1 0 0
+ 3  1 1 1 1 1 1 0 0
+ 2  1 1 1 1 1 1 0 0
+ 1  1 1 1 1 1 1 0 0
+
+    a b c d e f g h
+ */
+
+const U64 not_hg_file = 4557430888798830399ULL;
+
+U64 pawn_attacks[2][64];
+
+U64 gen_pawn_attacks(int color, int side);
+
+void init_pawn_attacks();
+
+void print_board(U64 board);
 
 #endif // !BOARD_H
