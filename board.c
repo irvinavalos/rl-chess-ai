@@ -3,10 +3,10 @@
 int main() {
   printf("\nChess Engine\n\n");
 
-  init_king_attacks();
+  // print_board(gen_rook_attacks(d4));
 
   for (int square = 0; square < 64; square++) {
-    print_board(king_attacks[square]);
+    print_board(gen_rook_attacks(square));
   }
 
   return 0;
@@ -139,6 +139,62 @@ void init_king_attacks() {
   for (int square = 0; square < 64; square++) {
     king_attacks[square] = gen_king_attacks(square);
   }
+}
+
+U64 gen_bishop_attacks(int square) {
+  U64 attacks = 0ULL;
+
+  int rank, file;
+  int target_rank = square / 8;
+  int target_file = square % 8;
+
+  for (rank = target_rank + 1, file = target_file + 1; rank <= 6 && file <= 6;
+       rank++, file++) {
+    attacks |= (1ULL << (get_square(rank, file)));
+  }
+
+  for (rank = target_rank - 1, file = target_file + 1; rank >= 1 && file <= 6;
+       rank--, file++) {
+    attacks |= (1ULL << (get_square(rank, file)));
+  }
+
+  for (rank = target_rank + 1, file = target_file - 1; rank <= 6 && file >= 1;
+       rank++, file--) {
+    attacks |= (1ULL << (get_square(rank, file)));
+  }
+
+  for (rank = target_rank - 1, file = target_file - 1; rank >= 1 && file >= 1;
+       rank--, file--) {
+    attacks |= (1ULL << (get_square(rank, file)));
+  }
+
+  return attacks;
+}
+
+U64 gen_rook_attacks(int square) {
+  U64 attacks = 0ULL;
+
+  int rank, file;
+  int target_rank = square / 8;
+  int target_file = square % 8;
+
+  for (rank = target_rank + 1; rank <= 6; rank++) {
+    attacks |= (1ULL << get_square(rank, target_file));
+  }
+
+  for (rank = target_rank - 1; rank >= 1; rank--) {
+    attacks |= (1ULL << get_square(rank, target_file));
+  }
+
+  for (file = target_file + 1; file <= 6; file++) {
+    attacks |= (1ULL << get_square(target_rank, file));
+  }
+
+  for (file = target_file - 1; file >= 1; file--) {
+    attacks |= (1ULL << get_square(target_rank, file));
+  }
+
+  return attacks;
 }
 
 void print_board(U64 board) {

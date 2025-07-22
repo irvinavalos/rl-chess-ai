@@ -120,6 +120,10 @@ U64 gen_king_attacks(int square);
 
 void init_king_attacks();
 
+U64 gen_bishop_attacks(int square);
+
+U64 gen_rook_attacks(int square);
+
 void print_board(U64 board);
 
 #endif // !BOARD_H
