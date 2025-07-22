@@ -104,9 +104,21 @@ const U64 not_hg_file = 4557430888798830399ULL;
 
 U64 pawn_attacks[2][64];
 
-U64 gen_pawn_attacks(int color, int side);
+U64 gen_pawn_attacks(int color, int square);
 
 void init_pawn_attacks();
+
+U64 knight_attacks[64];
+
+U64 gen_knight_attacks(int square);
+
+void init_knight_attacks();
+
+U64 king_attacks[64];
+
+U64 gen_king_attacks(int square);
+
+void init_king_attacks();
 
 void print_board(U64 board);
 
