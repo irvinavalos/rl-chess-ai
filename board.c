@@ -3,10 +3,18 @@
 int main() {
   printf("\nChess Engine\n\n");
 
-  // print_board(gen_rook_attacks(d4));
+  U64 board = 0ULL;
 
   for (int square = 0; square < 64; square++) {
-    print_board(gen_rook_attacks(square));
+    int rank = rank_index(square);
+    int file = file_index(square);
+    int square = get_square(rank, file);
+
+    set_bit(board, square);
+
+    printf("Bit at %d: %d\n\n", square, get_bit(board, square) ? 1 : 0);
+
+    print_board(board);
   }
 
   return 0;
@@ -44,8 +52,6 @@ void init_pawn_attacks() {
   for (int square = 0; square < 64; square++) {
     pawn_attacks[white][square] = gen_pawn_attacks(white, square);
     pawn_attacks[black][square] = gen_pawn_attacks(black, square);
-
-    knight_attacks[square] = gen_knight_attacks(square);
   }
 }
 
@@ -215,4 +221,5 @@ void print_board(U64 board) {
 
   printf("\n    a b c d e f g h\n\n");
   printf("Board: %llud\n\n", board);
+  printf("-----------------------------------------\n\n");
 }
