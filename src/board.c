@@ -1,52 +1,59 @@
 #include "board.h"
 
-int main() {
-  printf("\nChess Engine\n\n");
-
-  U64 board = 0ULL;
-
-  for (int square = 0; square < 64; square++) {
-    int rank = rank_index(square);
-    int file = file_index(square);
-    int square = get_square(rank, file);
-
-    set_bit(board, square);
-
-    printf("Bit at %d: %d\n\n", square, get_bit(board, square) ? 1 : 0);
-
-    print_board(board);
-  }
-
-  return 0;
-}
+U64 pawn_attacks[2][64];
 
 U64 gen_pawn_attacks(int color, int square) {
-  U64 attacks = 0ULL;
-  U64 board = 0ULL;
+  U64 attacks = empty_board;
+  U64 board = empty_board;
+
   set_bit(board, square);
 
-  if (!color) {
-
-    if ((board >> 7) & not_a_file) {
-      attacks |= (board >> 7);
+  if (color) {
+    if ((board << 7) & not_h_file) {
+      attacks |= south_east_one(board);
     }
-
-    if ((board >> 9) & not_h_file) {
-      attacks |= (board >> 9);
+    if ((board << 9) & not_a_file) {
+      attacks |= south_west_one(board);
     }
   } else {
-
-    if ((board << 7) & not_h_file) {
-      attacks |= (board << 7);
+    if ((board >> 7) & not_a_file) {
+      attacks |= north_west_one(board);
     }
-
-    if ((board << 9) & not_a_file) {
-      attacks |= (board << 9);
+    if ((board >> 9) & not_h_file) {
+      attacks |= north_east_one(board);
     }
   }
 
   return attacks;
 }
+
+// U64 gen_pawn_attacks(int color, int square) {
+//   U64 attacks = 0ULL;
+//   U64 board = 0ULL;
+//   set_bit(board, square);
+//
+//   if (!color) {
+//
+//     if ((board >> 7) & not_a_file) {
+//       attacks |= (board >> 7);
+//     }
+//
+//     if ((board >> 9) & not_h_file) {
+//       attacks |= (board >> 9);
+//     }
+//   } else {
+//
+//     if ((board << 7) & not_h_file) {
+//       attacks |= (board << 7);
+//     }
+//
+//     if ((board << 9) & not_a_file) {
+//       attacks |= (board << 9);
+//     }
+//   }
+//
+//   return attacks;
+// }
 
 void init_pawn_attacks() {
   for (int square = 0; square < 64; square++) {
@@ -54,6 +61,8 @@ void init_pawn_attacks() {
     pawn_attacks[black][square] = gen_pawn_attacks(black, square);
   }
 }
+
+U64 knight_attacks[64];
 
 U64 gen_knight_attacks(int square) {
   U64 attacks = 0ULL;
@@ -100,6 +109,8 @@ void init_knight_attacks() {
     knight_attacks[square] = gen_knight_attacks(square);
   }
 }
+
+U64 king_attacks[64];
 
 U64 gen_king_attacks(int square) {
   U64 attacks = 0ULL;
