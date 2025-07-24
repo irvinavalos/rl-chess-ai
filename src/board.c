@@ -8,52 +8,24 @@ U64 gen_pawn_attacks(int color, int square) {
 
   set_bit(board, square);
 
-  if (color) {
-    if ((board << 7) & not_h_file) {
+  if (color == black) {
+    if (south_east_capture(board, not_h_file)) {
       attacks |= south_east_one(board);
     }
-    if ((board << 9) & not_a_file) {
+    if (south_west_capture(board, not_a_file)) {
       attacks |= south_west_one(board);
     }
   } else {
-    if ((board >> 7) & not_a_file) {
+    if (north_west_capture(board, not_a_file)) {
       attacks |= north_west_one(board);
     }
-    if ((board >> 9) & not_h_file) {
+    if (north_east_capture(board, not_h_file)) {
       attacks |= north_east_one(board);
     }
   }
 
   return attacks;
 }
-
-// U64 gen_pawn_attacks(int color, int square) {
-//   U64 attacks = 0ULL;
-//   U64 board = 0ULL;
-//   set_bit(board, square);
-//
-//   if (!color) {
-//
-//     if ((board >> 7) & not_a_file) {
-//       attacks |= (board >> 7);
-//     }
-//
-//     if ((board >> 9) & not_h_file) {
-//       attacks |= (board >> 9);
-//     }
-//   } else {
-//
-//     if ((board << 7) & not_h_file) {
-//       attacks |= (board << 7);
-//     }
-//
-//     if ((board << 9) & not_a_file) {
-//       attacks |= (board << 9);
-//     }
-//   }
-//
-//   return attacks;
-// }
 
 void init_pawn_attacks() {
   for (int square = 0; square < 64; square++) {

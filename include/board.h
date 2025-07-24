@@ -5,12 +5,15 @@
 #include <stdio.h>
 #include "constants.h"
 
-/* Appends ULL suffix, ensuring input is compiled as an
- * unsigned 64 bit literal. Read more at:
- * https://www.chessprogramming.org/Bitboards#DefininingBitboards */
+// Appends ULL suffix, ensuring input is compiled as an
+// unsigned 64 bit literal. Read more at:
+// https://www.chessprogramming.org/Bitboards#DefininingBitboards
+//
 #define C64(constantU64) constantU64##ULL
 
-// Square mappings
+// LSF Mapping macros
+// Read more at:
+// https://www.chessprogramming.org/Square_Mapping_Considerations#Deduction_on_Files_and_Ranks
 
 #define file_index(square_index) (square_index % 8)
 #define rank_index(square_index) (square_index / 8)
@@ -20,15 +23,23 @@
 #define set_bit(board, square) (board |= (1ULL << square))
 #define pop_bit(board, square) (get_bit(board, square) ? board ^= (1ULL << square) : 0)
 
+// Pawn/King movement macros
+
 #define north_one(board) (board >> 8)
 #define north_west_one(board) (board >> 7)
 #define north_east_one(board) (board >> 9)
+
+#define north_west_capture(board, file) ((board >> 7) & not_a_file)
+#define north_east_capture(board, file) ((board >> 9) & not_h_file)
 
 #define south_one(board) (board << 8)
 #define south_west_one(board) (board << 9)
 #define south_east_one(board) (board << 7)
 
-enum boardSquare {
+#define south_west_capture(board, file) ((board << 9) & not_a_file)
+#define south_east_capture(board, file) ((board << 7) & not_h_file)
+
+enum BoardSquare {
   a8, b8, c8, d8, e8, f8, g8, h8,
   a7, b7, c7, d7, e7, f7, g7, h7,
   a6, b6, c6, d6, e6, f6, g6, h6,
@@ -39,18 +50,24 @@ enum boardSquare {
   a1, b1, c1, d1, e1, f1, g1, h1
 };
 
-enum pieceColor {
+enum Color {
   white,
   black
 };
+
+extern U64 pawn_attacks[2][64];
 
 U64 gen_pawn_attacks(int color, int square);
 
 void init_pawn_attacks();
 
+extern U64 knight_attacks[64];
+
 U64 gen_knight_attacks(int square);
 
 void init_knight_attacks();
+
+extern U64 king_attacks[64];
 
 U64 gen_king_attacks(int square);
 

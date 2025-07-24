@@ -3,7 +3,11 @@
 int main() {
   printf("\nChess Engine\n\n");
 
-  print_board(gen_pawn_attacks(white, e4));
+  init_pawn_attacks();
+
+  for (int square = 0; square < 64; square++) {
+    print_board(pawn_attacks[white][square]);
+  }
 
   return 0;
 }
