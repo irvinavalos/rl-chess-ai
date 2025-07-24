@@ -29,15 +29,15 @@
 #define north_west_one(board) (board >> 7)
 #define north_east_one(board) (board >> 9)
 
-#define north_west_capture(board, file) ((board >> 7) & not_a_file)
-#define north_east_capture(board, file) ((board >> 9) & not_h_file)
+#define pawn_north_west(board) ((board >> 7) & not_a_file)
+#define pawn_north_east(board) ((board >> 9) & not_h_file)
 
 #define south_one(board) (board << 8)
 #define south_west_one(board) (board << 9)
 #define south_east_one(board) (board << 7)
 
-#define south_west_capture(board, file) ((board << 9) & not_a_file)
-#define south_east_capture(board, file) ((board << 7) & not_h_file)
+#define pawn_south_west(board) ((board << 9) & not_a_file)
+#define pawn_south_east(board) ((board << 7) & not_h_file)
 
 enum BoardSquare {
   a8, b8, c8, d8, e8, f8, g8, h8,

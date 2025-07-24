@@ -9,17 +9,17 @@ U64 gen_pawn_attacks(int color, int square) {
   set_bit(board, square);
 
   if (color == black) {
-    if (south_east_capture(board, not_h_file)) {
+    if (pawn_south_east(board)) {
       attacks |= south_east_one(board);
     }
-    if (south_west_capture(board, not_a_file)) {
+    if (pawn_south_west(board)) {
       attacks |= south_west_one(board);
     }
   } else {
-    if (north_west_capture(board, not_a_file)) {
+    if (pawn_north_west(board)) {
       attacks |= north_west_one(board);
     }
-    if (north_east_capture(board, not_h_file)) {
+    if (pawn_north_east(board)) {
       attacks |= north_east_one(board);
     }
   }
@@ -37,8 +37,8 @@ void init_pawn_attacks() {
 U64 knight_attacks[64];
 
 U64 gen_knight_attacks(int square) {
-  U64 attacks = 0ULL;
-  U64 board = 0ULL;
+  U64 attacks = empty_board;
+  U64 board = empty_board;
   set_bit(board, square);
 
   if ((board >> 17) & not_h_file) {
