@@ -1,59 +1,77 @@
 #ifndef BOARD_H
-
 #define BOARD_H
 
 #include <stdio.h>
 #include "constants.h"
 
-// Appends ULL suffix, ensuring input is compiled as an
-// unsigned 64 bit literal. Read more at:
-// https://www.chessprogramming.org/Bitboards#DefininingBitboards
-//
-#define C64(constantU64) constantU64##ULL
+// Board representation. Read more at:
+// https://www.chessprogramming.org/Square_Mapping_Considerations#Little-Endian_Rank-File_Mapping
+// https://www.chessprogramming.org/Little-endian
 
-// LSF Mapping macros
-// Read more at:
+enum {
+  a1, b1, c1, d1, e1, f1, g1, h1, //  0 ..  7
+  a2, b2, c2, d2, e2, f2, g2, h2, //  8 .. 15
+  a3, b3, c3, d3, e3, f3, g3, h3, // 16 .. 23
+  a4, b4, c4, d4, e4, f4, g4, h4, // 24 .. 31
+  a5, b5, c5, d5, e5, f5, g5, h5, // 32 .. 39
+  a6, b6, c6, d6, e6, f6, g6, h6, // 40 .. 47
+  a7, b7, c7, d7, e7, f7, g7, h7, // 48 .. 55
+  a8, b8, c8, d8, e8, f8, g8, h8  // 56 .. 63
+};
+
+enum {
+  white,
+  black
+};
+
+// LSF Mapping Macros. Read more at:
 // https://www.chessprogramming.org/Square_Mapping_Considerations#Deduction_on_Files_and_Ranks
 
 #define file_index(square_index) (square_index % 8)
 #define rank_index(square_index) (square_index / 8)
 #define get_square(rank_index, file_index) (8 * rank_index + file_index)
 
-#define get_bit(board, square) (board & (1ULL << square))
-#define set_bit(board, square) (board |= (1ULL << square))
-#define pop_bit(board, square) (get_bit(board, square) ? board ^= (1ULL << square) : 0)
+#define get_bit(board, square_index) (board & (1ULL << square_index))
+#define set_bit(board, square_index) (board |= (1ULL << square_index))
+#define pop_bit(board, square_index) (get_bit(board, square_index) ? board ^= (1ULL << square_index) : 0)
 
-// Pawn/King movement macros
+// Direction Macros. Read more at:
+// https://www.chessprogramming.org/Direction#Ray_Directions
 
-#define north_one(board) (board >> 8)
-#define north_west_one(board) (board >> 7)
-#define north_east_one(board) (board >> 9)
+// Ray Directions
 
-#define pawn_north_west(board) ((board >> 7) & not_a_file)
-#define pawn_north_east(board) ((board >> 9) & not_h_file)
+typedef enum {
+  noWe = 7,
+  nort = 8,
+  noEa = 9,
+  west = 1,
+  center = 0,
+  east = 1,
+  soWe = 9,
+  sout = 8,
+  soEa = 7
+} RayDirection;
 
-#define south_one(board) (board << 8)
-#define south_west_one(board) (board << 9)
-#define south_east_one(board) (board << 7)
+// Knight Directions
 
-#define pawn_south_west(board) ((board << 9) & not_a_file)
-#define pawn_south_east(board) ((board << 7) & not_h_file)
+typedef enum {
+  noNoWe = 15,
+  noNoEa = 17,
+  noWeWe = 6,
+  noEaEa = 10,
+  soWeWe = 10,
+  soEaEa = 6,
+  soSoWe = 17,
+  soSoEa = 15
+} KnightDirection;
 
-enum BoardSquare {
-  a8, b8, c8, d8, e8, f8, g8, h8,
-  a7, b7, c7, d7, e7, f7, g7, h7,
-  a6, b6, c6, d6, e6, f6, g6, h6,
-  a5, b5, c5, d5, e5, f5, g5, h5,
-  a4, b4, c4, d4, e4, f4, g4, h4,
-  a3, b3, c3, d3, e3, f3, g3, h3,
-  a2, b2, c2, d2, e2, f2, g2, h2,
-  a1, b1, c1, d1, e1, f1, g1, h1
-};
+// Direction Macros
 
-enum Color {
-  white,
-  black
-};
+#define shift_up(board, dir) (board << dir)
+#define shift_down(board, dir) (board >> dir)
+
+#define shift_right(board) (board << east)
+#define shift_left(board) (board >> west)
 
 extern U64 pawn_attacks[2][64];
 

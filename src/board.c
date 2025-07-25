@@ -8,19 +8,19 @@ U64 gen_pawn_attacks(int color, int square) {
 
   set_bit(board, square);
 
-  if (color == black) {
-    if (pawn_south_east(board)) {
-      attacks |= south_east_one(board);
+  if (color == white) {
+    if (shift_up(board, noWe) & not_h_file) {
+      attacks |= shift_up(board, noWe);
     }
-    if (pawn_south_west(board)) {
-      attacks |= south_west_one(board);
+    if (shift_up(board, noEa) & not_a_file) {
+      attacks |= shift_up(board, noEa);
     }
   } else {
-    if (pawn_north_west(board)) {
-      attacks |= north_west_one(board);
+    if (shift_down(board, soWe) & not_h_file) {
+      attacks |= shift_down(board, soWe);
     }
-    if (pawn_north_east(board)) {
-      attacks |= north_east_one(board);
+    if (shift_down(board, soEa) & not_a_file) {
+      attacks |= shift_down(board, soEa);
     }
   }
 
@@ -39,38 +39,33 @@ U64 knight_attacks[64];
 U64 gen_knight_attacks(int square) {
   U64 attacks = empty_board;
   U64 board = empty_board;
+
   set_bit(board, square);
 
-  if ((board >> 17) & not_h_file) {
-    attacks |= (board >> 17);
+  if (shift_up(board, noWeWe) & not_hg_file) {
+    attacks |= shift_up(board, noWeWe);
+  }
+  if (shift_up(board, noNoWe) & not_h_file) {
+    attacks |= shift_up(board, noNoWe);
+  }
+  if (shift_up(board, noNoEa) & not_a_file) {
+    attacks |= shift_up(board, noNoEa);
+  }
+  if (shift_up(board, noEaEa) & not_ab_file) {
+    attacks |= shift_up(board, noEaEa);
   }
 
-  if ((board >> 15) & not_a_file) {
-    attacks |= (board >> 15);
+  if (shift_down(board, soWeWe) & not_hg_file) {
+    attacks |= shift_down(board, soWeWe);
   }
-
-  if ((board >> 10) & not_hg_file) {
-    attacks |= (board >> 10);
+  if (shift_down(board, soSoWe) & not_h_file) {
+    attacks |= shift_down(board, soSoWe);
   }
-
-  if ((board >> 6) & not_ab_file) {
-    attacks |= (board >> 6);
+  if (shift_down(board, soSoEa) & not_a_file) {
+    attacks |= shift_down(board, soSoEa);
   }
-
-  if ((board << 17) & not_a_file) {
-    attacks |= (board << 17);
-  }
-
-  if ((board << 15) & not_h_file) {
-    attacks |= (board << 15);
-  }
-
-  if ((board << 10) & not_ab_file) {
-    attacks |= (board << 10);
-  }
-
-  if ((board << 6) & not_hg_file) {
-    attacks |= (board << 6);
+  if (shift_down(board, soEaEa) & not_ab_file) {
+    attacks |= shift_down(board, soEaEa);
   }
 
   return attacks;
@@ -85,40 +80,36 @@ void init_knight_attacks() {
 U64 king_attacks[64];
 
 U64 gen_king_attacks(int square) {
-  U64 attacks = 0ULL;
-  U64 board = 0ULL;
+  U64 attacks = empty_board;
+  U64 board = empty_board;
+
   set_bit(board, square);
 
-  if (board >> 8) {
-    attacks |= (board >> 8);
+  if (shift_up(board, noWe) & not_h_file) {
+    attacks |= shift_up(board, noWe);
+  }
+  if (shift_up(board, nort)) {
+    attacks |= shift_up(board, nort);
+  }
+  if (shift_up(board, noEa) & not_a_file) {
+    attacks |= shift_up(board, noEa);
   }
 
-  if ((board >> 9) & not_h_file) {
-    attacks |= (board >> 9);
+  if (shift_down(board, soWe) & not_h_file) {
+    attacks |= shift_down(board, soWe);
+  }
+  if (shift_down(board, sout)) {
+    attacks |= shift_down(board, sout);
+  }
+  if (shift_down(board, soEa) & not_a_file) {
+    attacks |= shift_down(board, soEa);
   }
 
-  if ((board >> 7) & not_a_file) {
-    attacks |= (board >> 7);
+  if (shift_left(board) & not_h_file) {
+    attacks |= shift_left(board);
   }
-
-  if ((board >> 1) & not_h_file) {
-    attacks |= (board >> 1);
-  }
-
-  if (board << 8) {
-    attacks |= (board << 8);
-  }
-
-  if ((board << 9) & not_a_file) {
-    attacks |= (board << 9);
-  }
-
-  if ((board << 7) & not_h_file) {
-    attacks |= (board << 7);
-  }
-
-  if ((board << 1) & not_a_file) {
-    attacks |= (board << 1);
+  if (shift_right(board) & not_a_file) {
+    attacks |= shift_right(board);
   }
 
   return attacks;
@@ -131,7 +122,7 @@ void init_king_attacks() {
 }
 
 U64 gen_bishop_attacks(int square) {
-  U64 attacks = 0ULL;
+  U64 attacks = empty_board;
 
   int rank, file;
   int target_rank = square / 8;
@@ -187,13 +178,13 @@ U64 gen_rook_attacks(int square) {
 }
 
 void print_board(U64 board) {
-  for (int rank_idx = 0; rank_idx < 8; rank_idx++) {
-    for (int file_idx = 0; file_idx < 8; file_idx++) {
+  for (int rank = 7; rank >= 0; rank--) {
+    for (int file = 0; file < 8; file++) {
 
-      int square = get_square(rank_idx, file_idx);
+      int square = get_square(rank, file);
 
-      if (!file_idx) {
-        printf(" %d ", 8 - rank_idx);
+      if (!file) {
+        printf(" %d ", rank + 1);
       }
 
       printf(" %d", get_bit(board, square) ? 1 : 0);
@@ -203,6 +194,6 @@ void print_board(U64 board) {
   }
 
   printf("\n    a b c d e f g h\n\n");
-  printf("Board: %llud\n\n", board);
+  printf("Board: %llu\n\n", board);
   printf("-----------------------------------------\n\n");
 }
