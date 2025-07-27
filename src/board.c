@@ -125,53 +125,53 @@ U64 gen_bishop_attacks(int square) {
   U64 attacks = empty_board;
 
   int rank, file;
-  int target_rank = square / 8;
-  int target_file = square % 8;
+  int tar_rank = get_rank(square);
+  int tar_file = get_file(square);
 
-  for (rank = target_rank + 1, file = target_file + 1; rank <= 6 && file <= 6;
+  for (rank = tar_rank + 1, file = tar_file + 1; rank <= 6 && file <= 6;
        rank++, file++) {
-    attacks |= (1ULL << (get_square(rank, file)));
+    attacks |= (1ULL << get_square(rank, file));
   }
 
-  for (rank = target_rank - 1, file = target_file + 1; rank >= 1 && file <= 6;
+  for (rank = tar_rank - 1, file = tar_file + 1; rank >= 1 && file <= 6;
        rank--, file++) {
-    attacks |= (1ULL << (get_square(rank, file)));
+    attacks |= (1ULL << get_square(rank, file));
   }
 
-  for (rank = target_rank + 1, file = target_file - 1; rank <= 6 && file >= 1;
+  for (rank = tar_rank + 1, file = tar_file - 1; rank <= 6 && file >= 1;
        rank++, file--) {
-    attacks |= (1ULL << (get_square(rank, file)));
+    attacks |= (1ULL << get_square(rank, file));
   }
 
-  for (rank = target_rank - 1, file = target_file - 1; rank >= 1 && file >= 1;
+  for (rank = tar_rank - 1, file = tar_file - 1; rank >= 1 && file >= 1;
        rank--, file--) {
-    attacks |= (1ULL << (get_square(rank, file)));
+    attacks |= (1ULL << get_square(rank, file));
   }
 
   return attacks;
 }
 
 U64 gen_rook_attacks(int square) {
-  U64 attacks = 0ULL;
+  U64 attacks = empty_board;
 
   int rank, file;
-  int target_rank = square / 8;
-  int target_file = square % 8;
+  int tar_rank = get_rank(square);
+  int tar_file = get_file(square);
 
-  for (rank = target_rank + 1; rank <= 6; rank++) {
-    attacks |= (1ULL << get_square(rank, target_file));
+  for (rank = tar_rank + 1; rank <= 6; rank++) {
+    attacks |= (1ULL << get_square(rank, tar_file));
   }
 
-  for (rank = target_rank - 1; rank >= 1; rank--) {
-    attacks |= (1ULL << get_square(rank, target_file));
+  for (rank = tar_rank - 1; rank >= 1; rank--) {
+    attacks |= (1ULL << get_square(rank, tar_file));
   }
 
-  for (file = target_file + 1; file <= 6; file++) {
-    attacks |= (1ULL << get_square(target_rank, file));
+  for (file = tar_file + 1; file <= 6; file++) {
+    attacks |= (1ULL << get_square(tar_rank, file));
   }
 
-  for (file = target_file - 1; file >= 1; file--) {
-    attacks |= (1ULL << get_square(target_rank, file));
+  for (file = tar_file - 1; file >= 1; file--) {
+    attacks |= (1ULL << get_square(tar_rank, file));
   }
 
   return attacks;

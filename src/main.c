@@ -45,11 +45,19 @@ int main() {
 
   // print_board(attack);
 
-  init_king_attacks();
+  // init_king_attacks();
 
-  for (int square = 0; square < 64; square++) {
-    print_board(king_attacks[square]);
-  }
+  // for (int square = 0; square < 64; square++) {
+  //   print_board(king_attacks[square]);
+  // }
+
+  // for (int square = 0; square < 64; square++) {
+  //   print_board(gen_bishop_attacks(square));
+  // }
+
+  // for (int square = 0; square < 64; square++) {
+  //   print_board(gen_rook_attacks(square));
+  // }
 
   return 0;
 }

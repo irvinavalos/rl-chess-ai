@@ -27,13 +27,13 @@ enum {
 // LSF Mapping Macros. Read more at:
 // https://www.chessprogramming.org/Square_Mapping_Considerations#Deduction_on_Files_and_Ranks
 
-#define file_index(square_index) (square_index % 8)
-#define rank_index(square_index) (square_index / 8)
-#define get_square(rank_index, file_index) (8 * rank_index + file_index)
+#define get_file(square) (square % 8)
+#define get_rank(square) (square / 8)
+#define get_square(rank, file) (8 * rank + file)
 
-#define get_bit(board, square_index) (board & (1ULL << square_index))
-#define set_bit(board, square_index) (board |= (1ULL << square_index))
-#define pop_bit(board, square_index) (get_bit(board, square_index) ? board ^= (1ULL << square_index) : 0)
+#define get_bit(board, square) (board & (1ULL << square))
+#define set_bit(board, square) (board |= (1ULL << square))
+#define pop_bit(board, square) (get_bit(board, square) ? board ^= (1ULL << square) : 0)
 
 // Direction Macros. Read more at:
 // https://www.chessprogramming.org/Direction#Ray_Directions
