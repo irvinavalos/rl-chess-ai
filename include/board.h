@@ -95,6 +95,11 @@ U64 gen_bishop_attacks(int square);
 
 U64 gen_rook_attacks(int square);
 
+// Population Count - Brian Kernighan's way
+// Read more at: https://www.chessprogramming.org/Population_Count#Brian_Kernighan.27s_way
+
+int count_bits(U64 board);
+
 void print_board(U64 board);
 
 #endif // !BOARD_H

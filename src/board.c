@@ -1,4 +1,5 @@
 #include "board.h"
+#include "constants.h"
 
 U64 pawn_attacks[2][64];
 
@@ -175,6 +176,18 @@ U64 gen_rook_attacks(int square) {
   }
 
   return attacks;
+}
+
+int count_bits(U64 board) {
+  int count = 0;
+
+  while (board != empty_board) {
+    count += 1;
+
+    board &= board - 1;
+  }
+
+  return count;
 }
 
 void print_board(U64 board) {
