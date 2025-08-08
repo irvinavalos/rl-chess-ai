@@ -73,6 +73,27 @@ typedef enum {
 #define shift_right(board) (board << east)
 #define shift_left(board) (board >> west)
 
+// Population Count - Brian Kernighan's way
+// Read more at: https://www.chessprogramming.org/Population_Count#Brian_Kernighan.27s_way
+
+static inline int count_bits(U64 board) {
+  int count = 0;
+
+  while (board != empty_board) {
+    board &= board - 1;
+    count += 1;
+  }
+
+  return count;
+}
+
+// Least Significant One Bit - Isolation
+// Read more at: https://www.chessprogramming.org/General_Setwise_Operations#Isolation
+
+static inline U64 isolate_least_significant_bit(const U64 board) {
+  return board & -board;
+}
+
 extern U64 pawn_attacks[2][64];
 
 U64 gen_pawn_attacks(int color, int square);
@@ -94,11 +115,6 @@ void init_king_attacks();
 U64 gen_bishop_attacks(int square);
 
 U64 gen_rook_attacks(int square);
-
-// Population Count - Brian Kernighan's way
-// Read more at: https://www.chessprogramming.org/Population_Count#Brian_Kernighan.27s_way
-
-int count_bits(U64 board);
 
 void print_board(U64 board);
 

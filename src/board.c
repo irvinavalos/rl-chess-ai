@@ -178,18 +178,6 @@ U64 gen_rook_attacks(int square) {
   return attacks;
 }
 
-int count_bits(U64 board) {
-  int count = 0;
-
-  while (board != empty_board) {
-    count += 1;
-
-    board &= board - 1;
-  }
-
-  return count;
-}
-
 void print_board(U64 board) {
   for (int rank = 7; rank >= 0; rank--) {
     for (int file = 0; file < 8; file++) {
