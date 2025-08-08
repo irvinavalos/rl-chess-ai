@@ -126,25 +126,25 @@ U64 gen_bishop_attacks(int square) {
   U64 attacks = empty_board;
 
   int rank, file;
-  int tar_rank = get_rank(square);
-  int tar_file = get_file(square);
+  int target_rank = get_rank(square);
+  int target_file = get_file(square);
 
-  for (rank = tar_rank + 1, file = tar_file + 1; rank <= 6 && file <= 6;
+  for (rank = target_rank + 1, file = target_file + 1; rank <= 6 && file <= 6;
        rank++, file++) {
     attacks |= (1ULL << get_square(rank, file));
   }
 
-  for (rank = tar_rank - 1, file = tar_file + 1; rank >= 1 && file <= 6;
+  for (rank = target_rank - 1, file = target_file + 1; rank >= 1 && file <= 6;
        rank--, file++) {
     attacks |= (1ULL << get_square(rank, file));
   }
 
-  for (rank = tar_rank + 1, file = tar_file - 1; rank <= 6 && file >= 1;
+  for (rank = target_rank + 1, file = target_file - 1; rank <= 6 && file >= 1;
        rank++, file--) {
     attacks |= (1ULL << get_square(rank, file));
   }
 
-  for (rank = tar_rank - 1, file = tar_file - 1; rank >= 1 && file >= 1;
+  for (rank = target_rank - 1, file = target_file - 1; rank >= 1 && file >= 1;
        rank--, file--) {
     attacks |= (1ULL << get_square(rank, file));
   }
